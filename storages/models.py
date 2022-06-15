@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import F, Min, Count, Q
+from django.utils import timezone
 
 
 class StorageQuerySet(models.QuerySet):
@@ -52,6 +53,43 @@ class BoxQuerySet(models.QuerySet):
         return self.filter(empty=False)
 
 
+class Order(models.Model):
+    UNPROCCESSED = 'UN'
+    ON_THE_WAY = 'OTW'
+    DONE = 'D'
+    STATUSES = (
+        (UNPROCCESSED, 'Необработан'),
+        (ON_THE_WAY, 'В пути'),
+        (DONE, 'Завершён')
+    )
+    renter = models.ForeignKey(
+        'users.User',
+        verbose_name='заказчик',
+        related_name='заказы',
+        on_delete=models.CASCADE
+    )
+    need_delivery = models.BooleanField()
+    address = models.CharField('адрес', max_length=100)
+    status = models.CharField(
+        'статус',
+        max_length=10,
+        choices=STATUSES,
+        default=UNPROCCESSED,
+        db_index=True
+    )
+    created_at = models.DateTimeField(
+        'дата и время заказа',
+        default=timezone.now,
+        db_index=True
+    )
+    class Meta:
+        verbose_name = 'заказ'
+        verbose_name_plural = 'заказы'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f'{self.renter} {self.address}'
+
 class Box(models.Model):
     storage = models.ForeignKey(
         Storage,
@@ -78,7 +116,14 @@ class Box(models.Model):
         null=True,
         blank=True
     )
-
+    order = models.ForeignKey(
+        Order,
+        verbose_name='Заказ',
+        related_name='boxes',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     objects = BoxQuerySet.as_manager()
 
     class Meta:
