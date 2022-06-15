@@ -1,10 +1,26 @@
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Min, Count, Q
 
-class Storage(models.model):
+
+class StorageQuerySet(models.QuerySet):
+    def with_min_price(self):
+        return self.annotate(
+            min_price=Min('boxes__rental_price')
+        )
+        
+    def with_availability(self):
+        return self.annotate(
+            empty_boxes=Count('boxes', filter= Q(boxes__empty=True), distinct=True),
+            all_boxes = Count('boxes', distinct=True)
+        )
+
+
+class Storage(models.Model):
     address = models.CharField('адрес', max_length=100, unique=True)
     temperature = models.SmallIntegerField('температура')
     ceiling_height = models.FloatField('Высота в метрах')
+
+    objects = StorageQuerySet.as_manager()
 
 
 class BoxQuerySet(models.QuerySet):
@@ -16,17 +32,34 @@ class BoxQuerySet(models.QuerySet):
     def empty(self):
         return self.filter(empty=True)
 
-class Box(models.model):
+    def employed(self):
+        return self.filter(empty=False)
+
+
+class Box(models.Model):
     storage = models.ForeignKey(
         Storage,
         verbose_name='Склад',
         related_name='boxes',
         on_delete=models.CASCADE
     )
+    # renter = models.ForeignKey() # добавлю когда будет модель юзера
     number = models.CharField('номер', max_length=20)
     width = models.FloatField('ширина')
     length = models.FloatField('длина')
     height = models.FloatField('высота')
 
     empty = models.BooleanField('свободно')
+    rental_price = models.PositiveSmallIntegerField('Стоимость')
+    start_current_rent = models.DateField('Начало текущей аренды', null=True, blank=True)
+    end_current_rent = models.DateField('Конец текущей аренды', null=True, blank=True)
+    
+    objects = BoxQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = 'бокс'
+        verbose_name_plural = 'боксы'
+
+    def __str__(self):
+        return self.number
 
