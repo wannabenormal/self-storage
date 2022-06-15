@@ -19,7 +19,7 @@
       <th>Клиент</th>
       <th>Адрес доставки</th>
       <th>Стоимость</th>
-      <!-- <th>Ссылка на админку</th> -->
+      <th>Ссылка на админку</th>
     </tr>
 
     {% for item in order_items %}
@@ -29,6 +29,7 @@
         <td>{{ item.renter }}</td>
         <td>{{ item.address }}</td>
         <td>{{ item.cost }}</td>
+        <td><a href="{% url 'admin:storages_order_change' object_id=item.id %}?next={{ request.get_full_path|urlencode:'' }}">Редактировать</a></td>
       </tr>
     {% endfor %}
    </table>

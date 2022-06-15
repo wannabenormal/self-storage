@@ -25,6 +25,7 @@ def send_qr_to_renter(data_for_qr:str, renter_email, message):
     email.attach('code.png', byte_im)
     return email.send()
 
+
 def view_orders(request):
     orders = Order.objects.exclude(status='D') \
                           .filter(need_delivery=True) \
