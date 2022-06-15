@@ -3,6 +3,7 @@ import io
 import qrcode
 from django.core.mail import EmailMessage
 from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
 
 from .models import Order
 
@@ -26,6 +27,11 @@ def send_qr_to_renter(data_for_qr:str, renter_email, message):
     return email.send()
 
 
+def is_manager(user):
+    return user.is_staff
+
+
+@user_passes_test(is_manager, login_url='users')
 def view_orders(request):
     orders = Order.objects.exclude(status='D') \
                           .filter(need_delivery=True) \
