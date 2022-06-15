@@ -10,8 +10,15 @@ class StorageQuerySet(models.QuerySet):
 
     def with_availability(self):
         return self.annotate(
-            empty_boxes=Count('boxes', filter=Q(boxes__empty=True), distinct=True),
-            all_boxes = Count('boxes', distinct=True)
+            empty_boxes=Count(
+                'boxes',
+                filter=Q(boxes__empty=True),
+                distinct=True
+            ),
+            all_boxes=Count(
+                'boxes',
+                distinct=True
+            )
         )
 
 
@@ -61,9 +68,17 @@ class Box(models.Model):
 
     empty = models.BooleanField('свободно')
     rental_price = models.PositiveSmallIntegerField('Стоимость')
-    start_current_rent = models.DateField('Начало текущей аренды', null=True, blank=True)
-    end_current_rent = models.DateField('Конец текущей аренды', null=True, blank=True)
-    
+    start_current_rent = models.DateField(
+        'Начало текущей аренды',
+        null=True,
+        blank=True
+    )
+    end_current_rent = models.DateField(
+        'Конец текущей аренды',
+        null=True,
+        blank=True
+    )
+
     objects = BoxQuerySet.as_manager()
 
     class Meta:
@@ -72,4 +87,3 @@ class Box(models.Model):
 
     def __str__(self):
         return self.number
-
