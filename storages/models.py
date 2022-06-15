@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F, Min, Count, Q
+from django.db.models import F, Min, Count, Q, Sum
 from django.utils import timezone
 
 
@@ -13,7 +13,7 @@ class StorageQuerySet(models.QuerySet):
         return self.annotate(
             empty_boxes=Count(
                 'boxes',
-                filter=Q(boxes__empty=True),
+                filter=Q(boxes__order=None),
                 distinct=True
             ),
             all_boxes=Count(
@@ -29,7 +29,7 @@ class Storage(models.Model):
     ceiling_height = models.FloatField('Высота в метрах')
     feature = models.CharField('особенность', max_length=50, blank=True)
     contacts = models.CharField('Контакты', max_length=50, blank=True)
-    description = models.TextField('Описание')
+    description = models.TextField('Описание', blank=True)
     objects = StorageQuerySet.as_manager()
 
     class Meta:
@@ -52,6 +52,12 @@ class BoxQuerySet(models.QuerySet):
     def employed(self):
         return self.filter(empty=False)
 
+
+class OrderQuerySet(models.QuerySet):
+    def with_cost(self):
+        return self.annotate(
+            cost=Sum('boxes__rental_price')
+        )
 
 class Order(models.Model):
     UNPROCCESSED = 'UN'
@@ -82,6 +88,16 @@ class Order(models.Model):
         default=timezone.now,
         db_index=True
     )
+    start_current_rent = models.DateField(
+        'Начало текущей аренды',
+        default=timezone.now,
+    )
+    end_current_rent = models.DateField(
+        'Конец текущей аренды',
+    )
+
+    objects = OrderQuerySet.as_manager()
+    
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
@@ -89,6 +105,7 @@ class Order(models.Model):
     
     def __str__(self):
         return f'{self.renter} {self.address}'
+
 
 class Box(models.Model):
     storage = models.ForeignKey(
@@ -104,18 +121,7 @@ class Box(models.Model):
     length = models.FloatField('длина')
     height = models.FloatField('высота')
 
-    empty = models.BooleanField('свободно')
     rental_price = models.PositiveSmallIntegerField('Стоимость')
-    start_current_rent = models.DateField(
-        'Начало текущей аренды',
-        null=True,
-        blank=True
-    )
-    end_current_rent = models.DateField(
-        'Конец текущей аренды',
-        null=True,
-        blank=True
-    )
     order = models.ForeignKey(
         Order,
         verbose_name='Заказ',
