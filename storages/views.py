@@ -2,7 +2,9 @@ import io
 
 import qrcode
 from django.core.mail import EmailMessage
+from django.shortcuts import render
 
+from .models import Order
 
 def send_qr_to_renter(data_for_qr:str, renter_email, message):
     '''
@@ -23,3 +25,14 @@ def send_qr_to_renter(data_for_qr:str, renter_email, message):
     email.attach('code.png', byte_im)
     return email.send()
 
+def view_orders(request):
+    orders = Order.objects.exclude(status='D') \
+                          .filter(need_delivery=True) \
+                          .with_cost() \
+                          .select_related('renter')
+
+    return render(
+        request,
+        template_name='order_items.html',
+        context={'order_items': orders}
+    )
