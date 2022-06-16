@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 
+from phonenumber_field.modelfields import PhoneNumberField
 
 class CustomManager(BaseUserManager):
 
@@ -28,6 +29,7 @@ class CustomManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True)
     username = models.CharField(verbose_name='имя', max_length=150)
+    phonenumber = PhoneNumberField('номер телефона', db_index=True)
 
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_admin = models.BooleanField(default=False)

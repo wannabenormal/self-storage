@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'adminsortable2',
     'users',
-    'storages'
+    'storages',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [

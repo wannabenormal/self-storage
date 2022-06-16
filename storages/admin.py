@@ -40,7 +40,7 @@ class OrderAdmin(admin.ModelAdmin):
             )
             if url_allow:
                 return HttpResponseRedirect(request.GET['next'])
-        return 
+        return res
 
 
 class StorageBoxesInline(admin.TabularInline):
@@ -62,3 +62,8 @@ class StorageImagesInline(SortableInlineAdminMixin, admin.TabularInline):
 class StorageAdmin(admin.ModelAdmin):
     inlines = [StorageImagesInline, StorageBoxesInline]
     search_fields = ['city', 'address']
+
+
+@admin.register(Box)
+class BoxAdmin(admin.ModelAdmin):
+    pass

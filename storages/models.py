@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from django.db import models
 from django.db.models import F, Min, Count, Q, Sum
 from django.utils import timezone
@@ -66,11 +67,6 @@ class BoxQuerySet(models.QuerySet):
             area=F('width') * F('length')
         )
 
-    def empty(self):
-        return self.filter(empty=True)
-
-    def employed(self):
-        return self.filter(empty=False)
 
 
 class OrderQuerySet(models.QuerySet):
@@ -78,6 +74,10 @@ class OrderQuerySet(models.QuerySet):
         return self.annotate(
             cost=Sum('boxes__rental_price')
         )
+    
+    def expired(self):
+        current_date = datetime.now()
+        return self.filter(end_current_rent__lt=current_date)
 
 class Order(models.Model):
     UNPROCCESSED = 'UN'
@@ -86,7 +86,7 @@ class Order(models.Model):
     STATUSES = (
         (UNPROCCESSED, 'Необработан'),
         (ON_THE_WAY, 'В пути'),
-        (DONE, 'Завершён')
+        (DONE, 'Завершён'),
     )
     renter = models.ForeignKey(
         'users.User',
@@ -118,6 +118,10 @@ class Order(models.Model):
 
     objects = OrderQuerySet.as_manager()
     
+    @property
+    def get_delay(self):
+        return (date.today() - self.end_current_rent)
+
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
@@ -134,7 +138,6 @@ class Box(models.Model):
         related_name='boxes',
         on_delete=models.CASCADE
     )
-    # renter = models.ForeignKey() # добавлю когда будет модель юзера
     number = models.CharField('номер', max_length=20)
     floor = models.SmallIntegerField('этаж')
     width = models.FloatField('ширина')
