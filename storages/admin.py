@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from adminsortable2.admin import SortableInlineAdminMixin
 
-from .models import Order, Box
+from .models import Order, Box, Storage, StorageImage
 
 
 class BoxInline(admin.TabularInline):
@@ -39,3 +41,24 @@ class OrderAdmin(admin.ModelAdmin):
             if url_allow:
                 return HttpResponseRedirect(request.GET['next'])
         return 
+
+
+class StorageBoxesInline(admin.TabularInline):
+    model = Box
+    fields = ['number', 'floor', 'width', 'length', 'height', 'rental_price']
+
+
+class StorageImagesInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = StorageImage
+    fields = ['image', 'preview_image', 'order']
+    readonly_fields = ['preview_image']
+    extra = 1
+
+    def preview_image(self, obj):
+        return format_html('<img src="{}" height="200"/>', obj.image.url)
+
+
+@admin.register(Storage)
+class StorageAdmin(admin.ModelAdmin):
+    inlines = [StorageImagesInline, StorageBoxesInline]
+    search_fields = ['city', 'address']

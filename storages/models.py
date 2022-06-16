@@ -40,7 +40,24 @@ class Storage(models.Model):
         verbose_name_plural = 'Склады'
 
     def __str__(self):
-        return self.address
+        return f'{self.city}, {self.address}'
+
+
+class StorageImage(models.Model):
+    order = models.PositiveIntegerField(default=1, verbose_name='Порядок')
+    image = models.ImageField(verbose_name='Изображение')
+    storage = models.ForeignKey(
+        Storage,
+        on_delete=models.CASCADE,
+        related_name='images',
+        verbose_name='склад'
+    )
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f'{self.order} {self.storage}'
 
 
 class BoxQuerySet(models.QuerySet):

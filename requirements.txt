@@ -5,3 +5,4 @@ django-phonenumber-field==6.1.0
 qrcode==7.3.1
 pillow==9.1.1
 environs==9.5.0
+django-admin-sortable2==1.0
