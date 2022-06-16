@@ -28,7 +28,7 @@ class OrderAdmin(admin.ModelAdmin):
             )
             if url_allow:
                 return HttpResponseRedirect(request.GET['next'])
-        return 
+        return res
 
 
 

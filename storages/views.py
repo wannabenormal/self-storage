@@ -45,7 +45,11 @@ def view_orders(request):
     )
 
 def view_expired_orders(request):
-    orders = Order.objects.expired().select_related('renter')
+    orders = Order.objects.expired() \
+                          .prefetch_related('boxes') \
+                          .select_related('renter') \
+                          .order_by('end_current_rent')
+                           
     for order in orders:
         order.number_of_boxes = [box.number for box in order.boxes.all()]
     return render(

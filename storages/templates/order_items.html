@@ -17,6 +17,7 @@
       <th>ID заказа</th>
       <th>Статус</th>
       <th>Клиент</th>
+      <th> Номер телефона </th>
       <th>Адрес доставки</th>
       <th>Стоимость</th>
       <th>Ссылка на админку</th>
@@ -27,6 +28,7 @@
         <td>{{ item.id }}</td>
         <td>{{ item.get_status_display }}</td>
         <td>{{ item.renter }}</td>
+        <td>{{ item.renter.phonenumber }}</td>
         <td>{{ item.address }}</td>
         <td>{{ item.cost }}</td>
         <td><a href="{% url 'admin:storages_order_change' object_id=item.id %}?next={{ request.get_full_path|urlencode:'' }}">Редактировать</a></td>

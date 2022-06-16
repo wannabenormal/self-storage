@@ -16,6 +16,7 @@
     <tr>
       <th>ID заказа</th>
       <th>Клиент</th>
+      <th> Номер телефона </th>
       <th>Номер бокса</th>
       <th>Срок задержки оплаты</th>
       <th>Ссылка на админку</th>
@@ -25,6 +26,7 @@
       <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.renter }}</td>
+        <td>{{ item.renter.phonenumber }}</td>
         <td>
         {% for box in item.number_of_boxes %}
           {{ box }}
