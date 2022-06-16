@@ -1,0 +1,21 @@
+<!doctype html>{% load static %}
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="icon" href="{% static 'icon.png' %}" type="image/x-icon">
+
+  <title>Меню</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'Style.css' %}">
+</head>
+<body>
+    <div class="modal-body d-flex justify-content-center align-items-center">
+            {% csrf_token %}
+            <h1 class="modal-title text-center fw-bold mb-3">Меню</h1>
+            <p align="center"><a class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange" href="{% url 'storages:view_orders' %}">Необработанные Заказы</a></p>
+            <p align="center"><a class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange" href="{% url 'storages:expired_orders' %}">Просроченные Заказы</a></p>
+    </div>
+</body>
+</html>

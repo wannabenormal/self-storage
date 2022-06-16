@@ -57,3 +57,8 @@ def view_expired_orders(request):
         template_name='expired_orders.html',
         context={'order_items': orders}
     )
+
+
+@user_passes_test(is_manager, login_url='signin')
+def view_manager_menu(request):
+    return render(request, template_name='manager.html')
