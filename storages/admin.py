@@ -3,7 +3,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.http import HttpResponseRedirect
 from django.conf import settings
 
-from .models import Order, Box
+from .models import Order, Box, Storage
 
 
 class BoxInline(admin.TabularInline):
@@ -39,3 +39,15 @@ class OrderAdmin(admin.ModelAdmin):
             if url_allow:
                 return HttpResponseRedirect(request.GET['next'])
         return 
+
+
+
+class BoxAdmin(admin.TabularInline):
+    model = Box
+    extra = 0
+
+
+@admin.register(Storage)
+class StorageAdmin(admin.ModelAdmin):
+    inlines = [BoxAdmin]
+

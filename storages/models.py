@@ -50,11 +50,6 @@ class BoxQuerySet(models.QuerySet):
             area=F('width') * F('length')
         )
 
-    def empty(self):
-        return self.filter(empty=True)
-
-    def employed(self):
-        return self.filter(empty=False)
 
 
 class OrderQuerySet(models.QuerySet):
@@ -122,7 +117,6 @@ class Box(models.Model):
         related_name='boxes',
         on_delete=models.CASCADE
     )
-    # renter = models.ForeignKey() # добавлю когда будет модель юзера
     number = models.CharField('номер', max_length=20)
     floor = models.SmallIntegerField('этаж')
     width = models.FloatField('ширина')
