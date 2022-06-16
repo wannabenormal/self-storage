@@ -13,7 +13,7 @@ def signin(request):
         )
         login(request, user)
         if user.is_staff:
-            return redirect('storages:view_orders')
+            return redirect('storages:manager_menu')
         return render(request, 'index.html', context={})
         
     if request.method == 'GET':
