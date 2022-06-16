@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from django.db import models
 from django.db.models import F, Min, Count, Q, Sum
 from django.utils import timezone
@@ -61,6 +62,10 @@ class OrderQuerySet(models.QuerySet):
         return self.annotate(
             cost=Sum('boxes__rental_price')
         )
+    
+    def expired(self):
+        current_date = date.now()
+        return self.filter(end_current_rent__lt=current_date).annotate(delay=(current_date - F('end_current_rent')))
 
 class Order(models.Model):
     UNPROCCESSED = 'UN'
@@ -69,7 +74,7 @@ class Order(models.Model):
     STATUSES = (
         (UNPROCCESSED, 'Необработан'),
         (ON_THE_WAY, 'В пути'),
-        (DONE, 'Завершён')
+        (DONE, 'Завершён'),
     )
     renter = models.ForeignKey(
         'users.User',

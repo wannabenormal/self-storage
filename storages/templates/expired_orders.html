@@ -1,0 +1,37 @@
+{% extends 'base_storages_page.html' %}
+
+
+{% block title %}Просроченные заказы{% endblock %}
+
+{% block content %}
+  <center>
+    <h2>Просроченные заказы</h2>
+  </center>
+
+  <hr/>
+  <br/>
+  <br/>
+  <div class="container">
+   <table class="table table-responsive">
+    <tr>
+      <th>ID заказа</th>
+      <th>Клиент</th>
+      <th>Склад</th>
+      <th>Номер бокса</th>
+      <th>Срок задержки оплаты</th>
+      <th>Ссылка на админку</th>
+    </tr>
+
+    {% for item in order_items %}
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.renter }}</td>
+        <td>{{ item.box.storage }}</td>
+        <td>{{ item.box }}</td>
+        <td>{{item.delay }}</td>
+        <td><a href="{% url 'admin:storages_order_change' object_id=item.id %}?next={{ request.get_full_path|urlencode:'' }}">Редактировать</a></td>
+      </tr>
+    {% endfor %}
+   </table>
+  </div>
+{% endblock %}
