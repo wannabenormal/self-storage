@@ -1,6 +1,8 @@
 from users.models import User
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from django.core.mail import EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
 
 
 def signin(request):
@@ -12,6 +14,7 @@ def signin(request):
 
 
 def register(request):
+    current_site = get_current_site(request)
     context = {}
     if request.method == 'POST':
         email = request.POST['EMAIL_CREATE']
@@ -21,8 +24,18 @@ def register(request):
                 email=email,
                 username=email,
         )
+        subject_message = 'Вы успешно зарегестрированы'
+        message = f'''
+            Чтобы войти пройдите по ссылке: https://{current_site.domain}/users/login/
+            Ваш логин: {email}
+            Ваш пароль: {password}
+            '''
+        EmailMessage(
+                subject=subject_message,
+                body=message,
+                to=[email],
+        ).send()
         user = authenticate(email=request.POST['EMAIL_CREATE'], password=request.POST['PASSWORD_CREATE'])
-        # TODO Добавить уведомление о регистрации на email
         login(request, user)
         return render(request, 'index.html', context)
     if request.method == 'GET':
