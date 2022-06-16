@@ -24,12 +24,15 @@ class StorageQuerySet(models.QuerySet):
 
 
 class Storage(models.Model):
-    address = models.CharField('адрес', max_length=100, unique=True)
+    city = models.CharField('город', max_length=50)
+    address = models.CharField('адрес', max_length=100)
     temperature = models.SmallIntegerField('температура')
     ceiling_height = models.FloatField('Высота в метрах')
     feature = models.CharField('особенность', max_length=50, blank=True)
     contacts = models.CharField('Контакты', max_length=50, blank=True)
     description = models.TextField('Описание', blank=True)
+    driving_directions = models.TextField('Схема проезда', blank=True)
+
     objects = StorageQuerySet.as_manager()
 
     class Meta:
