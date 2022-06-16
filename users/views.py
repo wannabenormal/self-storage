@@ -1,6 +1,6 @@
 from users.models import User
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 
@@ -38,7 +38,9 @@ def register(request):
             to=[email],
         ).send()
         user = authenticate(
-            email=request.POST['EMAIL_CREATE'], password=request.POST['PASSWORD_CREATE'])
+            email=request.POST['EMAIL_CREATE'],
+            password=request.POST['PASSWORD_CREATE']
+        )
         login(request, user)
         return render(request, 'index.html', context)
     if request.method == 'GET':
