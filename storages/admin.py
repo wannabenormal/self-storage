@@ -19,7 +19,6 @@ class BoxInline(admin.TabularInline):
     extra = 0
 
 
-
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     raw_id_fields = ('renter',)
@@ -41,7 +40,8 @@ class OrderAdmin(admin.ModelAdmin):
             )
             if url_allow:
                 return HttpResponseRedirect(request.GET['next'])
-        return 
+        return res
+
 
 class StorageBoxesInline(admin.TabularInline):
     model = Box
@@ -67,5 +67,3 @@ class StorageAdmin(admin.ModelAdmin):
 @admin.register(Box)
 class BoxAdmin(admin.ModelAdmin):
     pass
-
-
