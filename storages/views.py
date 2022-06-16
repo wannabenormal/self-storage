@@ -31,7 +31,7 @@ def is_manager(user):
     return user.is_staff
 
 
-# @user_passes_test(is_manager, login_url='users:signin')
+@user_passes_test(is_manager, login_url='signin')
 def view_orders(request):
     orders = Order.objects.exclude(status='D') \
                           .filter(need_delivery=True) \

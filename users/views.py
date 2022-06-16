@@ -1,8 +1,9 @@
 from users.models import User
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
+from .forms import UserCreationForm
 
 
 def signin(request):
@@ -11,7 +12,15 @@ def signin(request):
             email=request.POST['EMAIL'], password=request.POST['PASSWORD']
         )
         login(request, user)
+        if user.is_staff:
+            return redirect('storages:view_orders')
         return render(request, 'index.html', context={})
+        
+    if request.method == 'GET':
+        form = UserCreationForm()
+        return render(request, "login.html", context={
+            'form': form
+        })
 
 
 def register(request):

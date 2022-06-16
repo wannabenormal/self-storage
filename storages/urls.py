@@ -3,8 +3,9 @@ from django.shortcuts import redirect
 
 from . import views
 
+app_name = 'storages'
 
 urlpatterns = [
-    path('expired_orders', views.view_expired_orders, name='expired_orders'),
+    path('expired_orders/', views.view_expired_orders, name='expired_orders'),
     path('orders/', views.view_orders, name='view_orders'),
 ]
