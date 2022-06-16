@@ -127,9 +127,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# EMAIL_HOST = env.str('EMAIL_HOST', 'smtp.rambler.ru')
-# EMAIL_HOST_USER = 'self.storage@rambler.ru'
-# EMAIL_HOST_PASSWORD = 'Dvm2_12345'
-# EMAIL_PORT = 465
-# EMAIL_USE_TLS= True
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST = 'smtp.mail.yahoo.com'
+EMAIL_HOST_USER = 'self_storage_dvm2@yahoo.com'
+EMAIL_HOST_PASSWORD = 'qwbfzpwwuesnzkmt'
+EMAIL_PORT = 587
+EMAIL_USE_TLS= True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
