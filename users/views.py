@@ -8,7 +8,7 @@ def signin(request):
         if 'EMAIL' in request.POST:
             user = authenticate(email=request.POST['EMAIL'], password=request.POST['PASSWORD'])
             login(request, user)
-        return render(request, 'index.html',context={})
+            return render(request, 'index.html',context={})
 
 
 def register(request):
