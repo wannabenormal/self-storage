@@ -7,12 +7,11 @@ from django.contrib.sites.shortcuts import get_current_site
 
 def signin(request):
     if request.method == 'POST':
-        if 'EMAIL' in request.POST:
-            user = authenticate(
-                email=request.POST['EMAIL'], password=request.POST['PASSWORD']
-            )
-            login(request, user)
-            return render(request, 'index.html', context={})
+        user = authenticate(
+            email=request.POST['EMAIL'], password=request.POST['PASSWORD']
+        )
+        login(request, user)
+        return render(request, 'index.html', context={})
 
 
 def register(request):
