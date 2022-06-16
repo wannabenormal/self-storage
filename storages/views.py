@@ -46,7 +46,8 @@ def view_orders(request):
 
 def view_expired_orders(request):
     orders = Order.objects.expired().select_related('renter')
-
+    for order in orders:
+        order.number_of_boxes = [box.number for box in order.boxes.all()]
     return render(
         request,
         template_name='expired_orders.html',

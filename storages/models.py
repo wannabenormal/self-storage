@@ -59,8 +59,8 @@ class OrderQuerySet(models.QuerySet):
         )
     
     def expired(self):
-        current_date = date.now()
-        return self.filter(end_current_rent__lt=current_date).annotate(delay=(current_date - F('end_current_rent')))
+        current_date = datetime.now()
+        return self.filter(end_current_rent__lt=current_date)
 
 class Order(models.Model):
     UNPROCCESSED = 'UN'
@@ -101,6 +101,10 @@ class Order(models.Model):
 
     objects = OrderQuerySet.as_manager()
     
+    @property
+    def get_delay(self):
+        return (date.today() - self.end_current_rent)
+
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'

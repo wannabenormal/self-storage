@@ -16,7 +16,6 @@
     <tr>
       <th>ID заказа</th>
       <th>Клиент</th>
-      <th>Склад</th>
       <th>Номер бокса</th>
       <th>Срок задержки оплаты</th>
       <th>Ссылка на админку</th>
@@ -26,9 +25,12 @@
       <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.renter }}</td>
-        <td>{{ item.box.storage }}</td>
-        <td>{{ item.box }}</td>
-        <td>{{item.delay }}</td>
+        <td>
+        {% for box in item.number_of_boxes %}
+          {{ box }}
+        {% endfor %}
+        </td>
+        <td>{{item.get_delay }}</td>
         <td><a href="{% url 'admin:storages_order_change' object_id=item.id %}?next={{ request.get_full_path|urlencode:'' }}">Редактировать</a></td>
       </tr>
     {% endfor %}
