@@ -53,3 +53,12 @@ def register(request):
         return render(request, 'index.html', context)
     if request.method == 'GET':
         return render(request, 'index.html', context)
+
+
+def lk(request):
+    user = request.user
+    if request.method == 'POST':
+        user.phonenumber = request.POST['PHONE_EDIT']
+        user.email = request.POST['EMAIL_EDIT']
+        user.save()
+    return render(request, 'my-rent.html', context={})
