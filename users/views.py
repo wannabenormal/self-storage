@@ -15,7 +15,7 @@ def signin(request):
         if user.is_staff:
             return redirect('storages:manager_menu')
         return render(request, 'index.html', context={})
-        
+
     if request.method == 'GET':
         form = UserCreationForm()
         return render(request, "login.html", context={

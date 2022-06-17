@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class CustomManager(BaseUserManager):
 
     def _create_user(self, email, username, password, **extra_fields):
@@ -27,9 +28,10 @@ class CustomManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
     email = models.EmailField(unique=True, null=True)
-    username = models.CharField(verbose_name='имя', max_length=150)
-    phonenumber = PhoneNumberField('номер телефона', db_index=True)
+    username = models.CharField(verbose_name='имя', max_length=150, blank=True)
+    phonenumber = PhoneNumberField('номер телефона', db_index=True, blank=True)
 
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_admin = models.BooleanField(default=False)
@@ -47,6 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.username
+
     class Meta:
         verbose_name = 'Пользователя'
         verbose_name_plural = 'Пользователи'
