@@ -26,17 +26,17 @@
 								<input type="email" name="EMAIL_EDIT" id="EMAIL" class="form-control fs_24 ps-2 SelfStorage__input" value="{{user.email}}" disabled>
 								<label class="fs_24 SelfStorage_green ms-2" for="PHONE">Телефон</label>
 								<input type="tel" name="PHONE_EDIT" id="PHONE" class="form-control fs_24 ps-2 SelfStorage__input" value="{{user.phonenumber}}" disabled>
-								<!-- <label class="fs_24 SelfStorage_green ms-2" for="PASSWORD">Пароль</label>
-								<input type="password" name="PASSWORD_EDIT" id="PASSWORD" class="form-control fs_24 ps-2 SelfStorage__input" value="{{user.password}}" disabled> -->
-								<button type="submit" class="btn SelfStorage_green ps-1" id="save" style="display: none">Сохранить</button>
+								<label class="fs_24 SelfStorage_green ms-2" for="PASSWORD">Пароль</label>
+								<input type="password" name="PASSWORD_EDIT" id="PASSWORD" class="form-control fs_24 ps-2 SelfStorage__input" value="{{user.password}}" disabled>
+
 								<a class="btn SelfStorage_orange ps-1" id="edit">Редактировать</a>
+								<button type="submit" class="btn SelfStorage_green ps-1" id="save" style="display: none">Сохранить</button>
 								<script>
 									document.getElementById('edit').addEventListener('click', e => {
 										e.preventDefault()
 										document.getElementById('EMAIL').disabled = false
 										document.getElementById('PHONE').disabled = false
-										document.getElementById('PASSWORD').disabled = false
-										document.getElementById('PASSWORD').type = 'text'
+
 										document.getElementById('edit').style.display = 'none'
 										document.getElementById('save').style.display = 'inline-block'
 									})
@@ -44,8 +44,7 @@
 										setTimeout(() => {
 											document.getElementById('EMAIL').disabled = true
 											document.getElementById('PHONE').disabled = true
-											document.getElementById('PASSWORD').disabled = true
-											document.getElementById('PASSWORD').type = 'password'
+
 											document.getElementById('edit').style.display = 'inline-block'
 											document.getElementById('save').style.display = 'none'
 										}, 0)
