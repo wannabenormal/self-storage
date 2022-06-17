@@ -7,6 +7,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 
 from .models import Order, Box
+from users.forms import UserCreationForm
+
 
 def send_qr_to_renter(data_for_qr:str, renter_email, message):
     '''
@@ -66,6 +68,12 @@ def view_manager_menu(request):
 
 
 def order_details(request, productid):
+    if not request.user.is_authenticated:
+        form = UserCreationForm()
+        return render(request, "login.html", context={
+            'form': form
+        }
+        )
     box = Box.objects.with_area().filter(number=productid)[0]
     start_current_rent = date.today()
     end_current_rent = start_current_rent + timedelta(days=30)
