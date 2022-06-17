@@ -74,7 +74,7 @@ class OrderQuerySet(models.QuerySet):
         return self.annotate(
             cost=Sum('boxes__rental_price')
         )
-    
+
     def expired(self):
         current_date = datetime.now()
         return self.filter(end_current_rent__lt=current_date)
@@ -91,7 +91,7 @@ class Order(models.Model):
     renter = models.ForeignKey(
         'users.User',
         verbose_name='заказчик',
-        related_name='заказы',
+        related_name='orders',
         on_delete=models.CASCADE
     )
     need_delivery = models.BooleanField('нужна доставка?')
@@ -117,7 +117,7 @@ class Order(models.Model):
     )
 
     objects = OrderQuerySet.as_manager()
-    
+
     @property
     def get_delay(self):
         return (date.today() - self.end_current_rent)
@@ -126,7 +126,7 @@ class Order(models.Model):
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
         ordering = ['-created_at']
-    
+
     def __str__(self):
         return f'{self.renter} {self.address}'
 
