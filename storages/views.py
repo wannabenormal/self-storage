@@ -1,11 +1,12 @@
 import io
+from datetime import date, timedelta
 
 import qrcode
 from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 
-from .models import Order
+from .models import Order, Box
 
 def send_qr_to_renter(data_for_qr:str, renter_email, message):
     '''
@@ -62,3 +63,18 @@ def view_expired_orders(request):
 @user_passes_test(is_manager, login_url='signin')
 def view_manager_menu(request):
     return render(request, template_name='manager.html')
+
+
+def order_details(request, productid):
+    box = Box.objects.with_area().filter(number=productid)[0]
+    start_current_rent = date.today()
+    end_current_rent = start_current_rent + timedelta(days=30)
+    return render(
+        request, 
+        template_name='order_details.html',
+        context={
+            'box': box,
+            'start_rent': start_current_rent, 
+            'end_rent': end_current_rent
+        }
+    )

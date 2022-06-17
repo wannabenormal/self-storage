@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<main class="container mt-header">
+<center>
+    <h2>Проверьте детали вашего заказа</h2>
+</center>
+<div class="container">
+    <p>Склад: {{ box.storage }}</p>
+    <p>Номер: {{ box.number }}</p>
+    <p>Этаж: {{ box.floor }}</p>
+    <p>Площадь: {{ box.area }}</p>
+    <p>Начало аренды: {{ start_rent }}</p>
+    <p>Конец аренды: {{ end_rent }}</p>
+</div>
+</main>
+{% endblock %}
