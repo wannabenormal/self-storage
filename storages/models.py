@@ -68,7 +68,6 @@ class BoxQuerySet(models.QuerySet):
         )
 
 
-
 class OrderQuerySet(models.QuerySet):
     def with_cost(self):
         return self.annotate(
@@ -78,6 +77,7 @@ class OrderQuerySet(models.QuerySet):
     def expired(self):
         current_date = datetime.now()
         return self.filter(end_current_rent__lt=current_date)
+
 
 class Order(models.Model):
     UNPROCCESSED = 'UN'
@@ -120,7 +120,7 @@ class Order(models.Model):
 
     @property
     def get_delay(self):
-        return (date.today() - self.end_current_rent)
+        return (self.end_current_rent - date.today()).total_seconds() // 86400
 
     class Meta:
         verbose_name = 'заказ'
