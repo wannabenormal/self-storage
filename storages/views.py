@@ -69,14 +69,14 @@ def view_manager_menu(request):
     return render(request, template_name='manager.html')
 
 
-def order_details(request, productid):
+def order_details(request, product_number):
     if not request.user.is_authenticated:
         form = UserCreationForm()
         return render(request, "login.html", context={
             'form': form
         }
         )
-    box = Box.objects.with_area().filter(number=productid)[0]
+    box = Box.objects.with_area().filter(number=product_number)[0]
     start_current_rent = date.today()
     end_current_rent = start_current_rent + timedelta(days=30)
     return render(

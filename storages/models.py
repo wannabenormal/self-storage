@@ -159,7 +159,11 @@ class Box(models.Model):
         related_name='boxes',
         on_delete=models.CASCADE
     )
-    number = models.CharField('номер', max_length=20)
+    number = models.CharField(
+        'номер',
+        max_length=20,
+        unique=True,
+    )
     floor = models.SmallIntegerField('этаж')
     width = models.FloatField('ширина')
     length = models.FloatField('длина')
