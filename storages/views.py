@@ -94,6 +94,7 @@ def order_details(request, productid):
 
 @csrf_exempt
 def save_order(request):
+    # TODO проверка на свободность бокса
     user = request.user
     order_details = json.loads(request.body.decode('utf-8'))
     box = Box.objects.get(number=order_details['box'])
