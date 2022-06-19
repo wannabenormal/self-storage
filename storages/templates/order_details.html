@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block script%}
+<script src="https://3dsec.sberbank.ru/payment/docsite/assets/js/ipay.js"></script>
+<script>
+    var ipay = new IPAY({api_token: 'YRF3C5RFICWISEWFR6GJ'});
+</script>
+<script>
+    function showSuccessfulPurchase(order) {
+        order.box = '{{box}}'
+        let data = JSON.stringify(order);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'storages:save_order' %}", true);
+        xhr.send(data);
+        xhr.onload = function() {
+        let responseObj = xhr.response;
+        // TODO редирект на главную
+        };
+    };
+</script>
+{% endblock %}
+
 {% block content %}
 <main class="container mt-header">
 <center>
@@ -12,6 +33,16 @@
     <p>Площадь: {{ box.area }}</p>
     <p>Начало аренды: {{ start_rent }}</p>
     <p>Конец аренды: {{ end_rent }}</p>
-</div>
+    <div class="d-flex flex-column align-items-center align-items-lg-start">
+        <a onclick="ipayCheckout({
+            amount: Number('{{ box.rental_price }}'),
+            currency:'RUB',
+            order_number:'',
+            description: 'Аренда помещения {{ box.number }} на складе {{ box.storage }}'},
+            function(order) { showSuccessfulPurchase(order) },
+            function(order) { showFailurefulPurchase(order) })"
+        
+            role="button" class="btn w-75 fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Арендовать бокс</a>
+    </div>
 </main>
 {% endblock %}

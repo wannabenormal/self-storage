@@ -1,10 +1,13 @@
 import io
 from datetime import date, timedelta
+from django.http import JsonResponse
+from pytz import timezone
 
 import qrcode
 from django.core.mail import EmailMessage
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import user_passes_test
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Order, Box
 from users.forms import UserCreationForm
@@ -86,3 +89,14 @@ def order_details(request, productid):
             'end_rent': end_current_rent
         }
     )
+
+
+@csrf_exempt
+def save_order(request):
+    user = request.user
+    order_details = request.body.decode('utf-8')
+    Order.objects.create(
+        renter=user,
+        end_current_rent= date.today() + timedelta(days=30)
+    )
+    return JsonResponse({'status': 'ok','redirect': ''})

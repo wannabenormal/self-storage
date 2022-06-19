@@ -94,8 +94,8 @@ class Order(models.Model):
         related_name='orders',
         on_delete=models.CASCADE
     )
-    need_delivery = models.BooleanField('нужна доставка?')
-    address = models.CharField('адрес', max_length=100)
+    need_delivery = models.BooleanField('нужна доставка?', default=False)
+    address = models.CharField('адрес', max_length=100, blank=True)
     status = models.CharField(
         'статус',
         max_length=10,
