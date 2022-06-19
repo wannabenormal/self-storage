@@ -1,4 +1,5 @@
 import io
+import json
 from datetime import date, timedelta
 from django.http import JsonResponse
 from pytz import timezone
@@ -92,12 +93,16 @@ def order_details(request, product_number):
 
 @csrf_exempt
 def save_order(request):
+    # TODO проверка на свободность бокса
     user = request.user
-    order_details = request.body.decode('utf-8')
-    Order.objects.create(
+    order_details = json.loads(request.body.decode('utf-8'))
+    box = Box.objects.get(number=order_details['box'])
+    order = Order.objects.create(
         renter=user,
-        end_current_rent= date.today() + timedelta(days=30)
+        end_current_rent= date.today() + timedelta(days=30),
     )
+    order.boxes.add(box)
+    order.save()
     return JsonResponse({'status': 'ok','redirect': ''})
 
 
@@ -109,3 +114,4 @@ def view_storages(request):
         template_name='boxes.html',
         context={'storages': storages}
     )
+
