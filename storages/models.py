@@ -78,6 +78,11 @@ class OrderQuerySet(models.QuerySet):
         current_date = datetime.now()
         return self.filter(end_current_rent__lt=current_date)
 
+    def with_remaining_term(self):
+        return self.annotate(
+            remaining_term=(F('end_current_rent') - date.today())
+        )
+
 
 class Order(models.Model):
     UNPROCCESSED = 'UN'
