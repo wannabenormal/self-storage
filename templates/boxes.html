@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% block title %}Арендовать бокс{% endblock %}
 <aside class="modal fade" id="RegModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
 		<div class="modal-content">
@@ -270,7 +271,7 @@
           </div>
 
           {% if storage.boxes.to_3.count > 0 %}
-            <div class="tab-pane fade" id="pills-to3_{{ storage.id }}" role="tabpanel" aria-labelledby="pills-profile-tab">  
+            <div class="tab-pane fade" id="pills-to3_{{ storage.id }}" role="tabpanel" aria-labelledby="pills-profile-tab">
               {% for box in storage.boxes.to_3 %}
                 <a href="{% url 'order_details' product_number=box.number %}" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
                   <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
@@ -308,7 +309,7 @@
                   </div>
                 </a>
               {% endfor %}
-              
+
               {% if storage.boxes.to_10.count > 2 %}
                 <div class="collapse" id="collapse-to10_{{ storage.id }}">
                   {% for box in storage.boxes.to_10|slice:'2:' %}

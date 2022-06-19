@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% block title %}Личный кабинет{% endblock %}
 
 <main class="container mt-header">
 	<div class="row" role="tablist">
@@ -67,8 +68,8 @@
 					<a href="#" class="SelfStorage_orange">История аренды</a>
 					<br><br>
 				{% for box in user_boxes %}
-					{% if box.order.get_delay >= 15 %}
-					<h4 class="SelfStorage_grey my-3">Срок Вашей аренды подходит к концу :(<br>Вы можете продлить аренду или забрать вещи до {{ box.order.end_current_rent }} года включительно.</h4>
+					{% if box.order.get_delay <= 5 %}
+					<h4 class="SelfStorage_grey my-3">Срок Вашей аренды подходит к концу :(<br>Вы можете продлить аренду или забрать вещи до {{ box.order.end_current_rent|date:"j.m.Y" }} включительно.</h4>
 					{% else %}
 					{% endif %}
 					<div class="mb-5">
