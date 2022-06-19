@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Order, Box, Storage
+from geolocation.views import get_nearest_storage
 from users.forms import UserCreationForm
 
 def send_qr_to_renter(data_for_qr:str, renter_email, message):
@@ -115,3 +116,14 @@ def view_storages(request):
         context={'storages': storages}
     )
 
+
+def view_index(request):
+    nearest_storage = get_nearest_storage(request)
+
+    return render(
+        request,
+        template_name='index.html',
+        context= {
+            'nearest_storage': nearest_storage 
+        }
+    )
