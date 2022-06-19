@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.contrib.auth.decorators import user_passes_test
 
-from .models import Order
+from .models import Order, Storage
 
 def send_qr_to_renter(data_for_qr:str, renter_email, message):
     '''
@@ -62,3 +62,13 @@ def view_expired_orders(request):
 @user_passes_test(is_manager, login_url='signin')
 def view_manager_menu(request):
     return render(request, template_name='manager.html')
+
+
+def view_storages(request):
+    storages = Storage.objects.with_min_price().with_availability().all()
+
+    return render(
+        request,
+        template_name='boxes.html',
+        context={'storages': storages}
+    )

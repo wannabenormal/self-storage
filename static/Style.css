@@ -151,3 +151,16 @@ body {
 .z-index-1 {
     z-index: -1;
 }
+
+.Storage__image {
+    width: 100%;
+    height: auto;
+}
+
+.Storage__boxes {
+    display: none;
+}
+
+.Storage__boxes.active {
+    display: block;
+}
