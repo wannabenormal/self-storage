@@ -9,9 +9,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Order, Box
+from .models import Order, Box, Storage
 from users.forms import UserCreationForm
-
 
 def send_qr_to_renter(data_for_qr:str, renter_email, message):
     '''
@@ -100,3 +99,13 @@ def save_order(request):
         end_current_rent= date.today() + timedelta(days=30)
     )
     return JsonResponse({'status': 'ok','redirect': ''})
+
+
+def view_storages(request):
+    storages = Storage.objects.with_min_price().with_availability().all()
+
+    return render(
+        request,
+        template_name='boxes.html',
+        context={'storages': storages}
+    )

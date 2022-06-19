@@ -5,13 +5,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from storages.views import view_storages
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
-    path('boxes/', TemplateView.as_view(template_name='boxes.html'), name='boxes'),
     path('account/', userviews.lk, name='account'),
+    path('boxes/', view_storages, name='boxes'),
     path('faq/', TemplateView.as_view(template_name='faq.html'), name='faq'),
     path('pay/', TemplateView.as_view(template_name='pay.html'), name='pay'),
     path('users/', include('users.urls')),

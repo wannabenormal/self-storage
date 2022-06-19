@@ -67,6 +67,27 @@ class BoxQuerySet(models.QuerySet):
             area=F('width') * F('length')
         )
 
+    def to_3(self):
+        return self.annotate(
+            area=F('width') * F('length')
+        ).filter(
+            area__lte=3
+        )
+
+    def to_10(self):
+        return self.annotate(
+            area=F('width') * F('length')
+        ).filter(
+            area__lte=10
+        )
+
+    def from_10(self):
+        return self.annotate(
+            area=F('width') * F('length')
+        ).filter(
+            area__gte=10
+        )
+
 
 class OrderQuerySet(models.QuerySet):
     def with_cost(self):
