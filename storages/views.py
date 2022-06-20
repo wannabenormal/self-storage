@@ -136,10 +136,21 @@ def view_index(request):
         }
     )
 
+
+def end_rent(user, box_number):
+    box = Box.objects.select_related('order').get(number=box_number)
+    if box.order.renter == user:
+        box.order = None
+        box.save()
+    return
+
+
 @csrf_exempt
 def open_box(request):
     user = request.user
     order_details = json.loads(request.body.decode('utf-8'))
+    if order_details.get('end_rent'):
+        end_rent(user, order_details.get('box'))
     message = f"""Добрый день {user.username}! Код доступа для окрытия вашего бокса.
               Если вы не запрашивали код, пожалуйста, обратитесь в службу поддержки:   
               8 (800) 000-00-00 """
