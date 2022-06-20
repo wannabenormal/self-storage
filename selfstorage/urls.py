@@ -10,7 +10,7 @@ from storages.views import view_storages
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    path('', storagesviews.view_index, name='index'),
     path('account/', userviews.lk, name='account'),
     path('boxes/', view_storages, name='boxes'),
     path('faq/', TemplateView.as_view(template_name='faq.html'), name='faq'),
