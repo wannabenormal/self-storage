@@ -19,7 +19,7 @@ def signin(request):
             login(request, user)
             if user.is_staff:
                 return redirect('storages:manager_menu')
-            return render(request, 'index.html', context={})
+            return redirect('index')
 
         if request.method == 'GET':
             form = UserCreationForm()
@@ -27,9 +27,9 @@ def signin(request):
                 'form': form
             })
     except AttributeError:
-        return render(request, "index.html")
+        return redirect('index')
     except UnboundLocalError:
-        return render(request, "index.html")
+        return redirect('index')
 
 
 def register(request):
@@ -60,11 +60,11 @@ def register(request):
                 password=request.POST['PASSWORD_CREATE']
             )
             login(request, user)
-            return render(request, 'index.html', context)
+            return redirect('index')
         if request.method == 'GET':
-            return render(request, 'index.html', context)
+            return redirect('index')
     except IntegrityError:
-        return render(request, 'index.html', context)
+        return redirect('index')
 
 
 def lk(request):
