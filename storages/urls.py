@@ -9,5 +9,6 @@ urlpatterns = [
     path('', views.view_manager_menu, name='manager_menu'),
     path('expired_orders/', views.view_expired_orders, name='expired_orders'),
     path('orders/', views.view_orders, name='view_orders'),
-    path('save_order', views.save_order, name='save_order')
+    path('save_order', views.save_order, name='save_order'),
+    path('open_box' ,views.open_box, name='open_box'),
 ]

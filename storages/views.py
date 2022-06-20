@@ -19,7 +19,6 @@ def send_qr_to_renter(data_for_qr:str, renter_email, message):
     Генерирует qr из параметра data_for_qr, отправляет на почту renter_email,
     с текстом message. При успешной отправке возвращает 1
     '''
-    
     code = qrcode.make(data_for_qr)
     im_resize = code.resize((500, 500))
     buf = io.BytesIO()
@@ -31,7 +30,7 @@ def send_qr_to_renter(data_for_qr:str, renter_email, message):
         to=(renter_email,)
     )
     email.attach('code.png', byte_im)
-    return email.send()
+    return email.send(fail_silently=False)
 
 
 def is_manager(user):
@@ -111,7 +110,7 @@ def save_order(request):
         )
         order.boxes.add(box)
         order.save()
-    return JsonResponse({'status': 'ok','redirect': ''})
+    return JsonResponse({'message': 'ok','redirect': ''})
 
 
 def view_storages(request):
@@ -136,3 +135,16 @@ def view_index(request):
             'nearest_storage': nearest_storage 
         }
     )
+
+@csrf_exempt
+def open_box(request):
+    user = request.user
+    order_details = json.loads(request.body.decode('utf-8'))
+    message = f"""Добрый день {user.username}! Код доступа для окрытия вашего бокса.
+              Если вы не запрашивали код, пожалуйста, обратитесь в службу поддержки:   
+              8 (800) 000-00-00 """
+    data_for_qr = 'https://dvmn.org'
+    if send_qr_to_renter(data_for_qr, user.email, message):
+        return JsonResponse({'message': 'ok'})
+    return JsonResponse({'message': 'something went wrong'})
+
