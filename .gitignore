@@ -160,3 +160,9 @@ cython_debug/
 #.idea/
 .vscode/launch.json
 media/
+.idea/modules.xml
+.idea/self-storage.iml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
