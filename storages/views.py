@@ -119,7 +119,9 @@ def view_storages(request):
 
 def view_index(request):
     nearest_storage = get_nearest_storage(request)
-
+    nearest_storage = Storage.objects.with_min_price() \
+                             .with_availability() \
+                             .filter(pk=nearest_storage.pk)[0]
     return render(
         request,
         template_name='index.html',
