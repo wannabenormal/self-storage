@@ -9,6 +9,8 @@
 <script>
     function showSuccessfulPurchase(order) {
         order.box = '{{box}}'
+        order.start_rent = '{{start_rent|date:"Y-m-d"}}'
+        order.end_rent = '{{end_rent|date:"Y-m-d"}}'
         let data = JSON.stringify(order);
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "{% url 'storages:save_order' %}", true);

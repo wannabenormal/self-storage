@@ -79,8 +79,12 @@ def order_details(request, product_number):
         }
         )
     box = Box.objects.with_area().filter(number=product_number)[0]
-    start_current_rent = date.today()
-    end_current_rent = start_current_rent + timedelta(days=30)
+    if request.GET.get('prolong'):
+        start_current_rent = box.order.start_current_rent
+        end_current_rent = box.order.end_current_rent + timedelta(days=30)
+    else:
+        start_current_rent = date.today()
+        end_current_rent = start_current_rent + timedelta(days=30)
     return render(
         request, 
         template_name='order_details.html',
@@ -94,16 +98,19 @@ def order_details(request, product_number):
 
 @csrf_exempt
 def save_order(request):
-    # TODO проверка на свободность бокса
     user = request.user
     order_details = json.loads(request.body.decode('utf-8'))
-    box = Box.objects.get(number=order_details['box'])
-    order = Order.objects.create(
-        renter=user,
-        end_current_rent= date.today() + timedelta(days=30),
-    )
-    order.boxes.add(box)
-    order.save()
+    box = Box.objects.select_related('order').get(number=order_details['box'])
+    if box.order and box.order.renter == user:
+        box.order.end_current_rent = order_details['end_rent']
+        box.order.save()
+    else:
+        order = Order.objects.create(
+            renter = user,
+            end_current_rent= date.today() + timedelta(days=30),
+        )
+        order.boxes.add(box)
+        order.save()
     return JsonResponse({'status': 'ok','redirect': ''})
 
 
