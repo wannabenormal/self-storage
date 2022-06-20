@@ -2,11 +2,12 @@
 {% load static %}
 {% block script%}
 <script>
-	function openBox(box) {
+	function openBox(box, end_rent) {
+		let data = JSON.stringify({box: box, end_rent: end_rent});
 		var xhr = new XMLHttpRequest();
-		xhr.open("POST", "{% url 'storages:open_box' %}", true);
-		xhr.send(box);
-		alert("На вашу почту отправлено сообзение с кодом доступа");
+		xhr.open("POST", "{% url 'api:open_box' %}", true);
+		xhr.send(data);
+		alert("На вашу почту отправлено сообщение с кодом доступа к помещению");
 	}
 </script>
 {% endblock %}
@@ -69,7 +70,7 @@
 				<div class="tab-pane fade" id="Rent" role="tabpanel" aria-labelledby="Rent-tab">
 					<h1 class="fw-bold SelfStorage_green">Добрый день, {{user.email}}!</h1>
 					<h4 class="SelfStorage_grey my-5">У вас еще нет аренды :(<br>Но вы можете арендовать свой первый бокс  по  привлекательной цене прямо сейчас</h4>
-					<div><button class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Арендовать бокс</button></div>
+					<div><a href="{% url 'boxes' %}" class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Арендовать бокс</a></div>
 					<a href="#" class="SelfStorage_orange">Нужна помощь?</a>
 				</div>
 			{% else %}
@@ -90,7 +91,8 @@
 						<h4 class="SelfStorage_green">Срок аренды</h4>
 						<h4>{{ box.order.start_current_rent|date:"j.m.Y" }} - {{ box.order.end_current_rent|date:"j.m.Y" }}</h4>
 						<div><a class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3" href="{% url 'order_details' product_number=box.number %}?prolong=1">Продлить аренду</a></div>
-						<div><button onclick= "openBox('{{box}}')", class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
+						<div><button onclick= "openBox('{{box}}', false)", class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
+						<div><button onclick= "openBox('{{box}}', true)", class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Завершить аренду</button></div>
 					</div>
 				{% endfor %}
 						<a href="#" class="SelfStorage_orange">Нужна помощь?</a>

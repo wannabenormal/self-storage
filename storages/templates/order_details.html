@@ -13,7 +13,7 @@
         order.end_rent = '{{end_rent|date:"Y-m-d"}}'
         let data = JSON.stringify(order);
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "{% url 'storages:save_order' %}", true);
+        xhr.open("POST", "{% url 'api:save_order' %}", true);
         xhr.send(data);
         xhr.onload = function() {
         let responseObj = xhr.response;

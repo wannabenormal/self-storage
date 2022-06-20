@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'storages',
     'phonenumber_field',
     'geolocation',
+    'api',
 ]
 
 MIDDLEWARE = [
