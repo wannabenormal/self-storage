@@ -6,5 +6,5 @@ app_name = 'api'
 
 urlpatterns = [
     path('save_order', views.save_order, name='save_order'),
-    path('open_box' ,views.open_box, name='open_box'),
+    path('open_box', views.open_box, name='open_box'),
 ]

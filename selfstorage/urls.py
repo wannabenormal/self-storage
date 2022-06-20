@@ -21,5 +21,4 @@ urlpatterns = [
     path('signin/', userviews.signin, name='signin'),
     path('manager/', include('storages.urls')),
     path('order_details/<product_number>/', storagesviews.order_details, name='order_details'),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

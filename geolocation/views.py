@@ -24,10 +24,9 @@ def get_coordinats_by_ip(ip):
     response.raise_for_status()
     print(response.json())
     return response.json()
-    
+
 
 def get_nearest_storage(request):
-
     user_ip = get_client_ip(request)
     if not user_ip:
         return Storage.objects.first()
@@ -43,7 +42,7 @@ def get_nearest_storage(request):
         user_location.latitude = coordinats['latitude']
         user_location.longitude = coordinats['longitude']
         user_location.save()
-    
+
     distances = []
     storages_location = StorageLocation.objects.all()
     for storage_location in storages_location:
@@ -55,5 +54,3 @@ def get_nearest_storage(request):
     sorted_distances = sorted(distances, key=lambda x: x[1])
     if sorted_distances:
         return sorted_distances[0][0]
-
-    

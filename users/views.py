@@ -34,7 +34,6 @@ def signin(request):
 
 def register(request):
     current_site = get_current_site(request)
-    context = {}
     try:
         if request.method == 'POST':
             email = request.POST['EMAIL_CREATE']

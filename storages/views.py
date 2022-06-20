@@ -25,13 +25,13 @@ def view_orders(request):
         context={'order_items': orders}
     )
 
+
 @user_passes_test(is_manager, login_url='signin')
 def view_expired_orders(request):
     orders = Order.objects.expired() \
                           .prefetch_related('boxes') \
                           .select_related('renter') \
                           .order_by('end_current_rent')
-                           
     for order in orders:
         order.number_of_boxes = [box.number for box in order.boxes.all()]
     return render(
@@ -49,9 +49,10 @@ def view_manager_menu(request):
 def order_details(request, product_number):
     if not request.user.is_authenticated:
         form = UserCreationForm()
-        return render(request, "login.html", context={
-            'form': form
-        }
+        return render(
+            request,
+            "login.html",
+            context={'form': form}
         )
     box = Box.objects.with_area().filter(number=product_number)[0]
     if request.GET.get('prolong'):
@@ -61,18 +62,20 @@ def order_details(request, product_number):
         start_current_rent = date.today()
         end_current_rent = start_current_rent + timedelta(days=30)
     return render(
-        request, 
+        request,
         template_name='order_details.html',
         context={
             'box': box,
-            'start_rent': start_current_rent, 
+            'start_rent': start_current_rent,
             'end_rent': end_current_rent
         }
     )
 
 
 def view_storages(request):
-    storages = Storage.objects.with_min_price().with_availability().all()
+    storages = Storage.objects.with_min_price() \
+                              .with_availability() \
+                              .all()
 
     return render(
         request,
@@ -89,9 +92,5 @@ def view_index(request):
     return render(
         request,
         template_name='index.html',
-        context= {
-            'nearest_storage': nearest_storage 
-        }
+        context={'nearest_storage': nearest_storage}
     )
-
-
